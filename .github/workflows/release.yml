@@ -35,14 +35,15 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           tag="${{ github.ref_name }}"
-          find_draft() {
-            gh api "repos/${{ github.repository }}/releases?per_page=50" \
-              --jq ".[] | select(.tag_name == \"$tag\" and .draft) | .id" | head -n 1
-          }
-          id=$(find_draft)
+          repo="${{ github.repository }}"
+          # Reuse a draft left by an earlier run for this tag; otherwise create one and
+          # take its id from the API response (a fresh draft is not always listed yet).
+          id=$(gh api "repos/$repo/releases?per_page=50" --jq ".[] | select(.tag_name == \"$tag\" and .draft) | .id" | head -n 1)
           if [ -z "$id" ]; then
-            gh release create "$tag" --draft --title "Guarded Upgrade Path ${tag#v}" --notes-file .github/release-notes.md
-            id=$(find_draft)
+            id=$(gh api -X POST "repos/$repo/releases" \
+              -f tag_name="$tag" -F draft=true -F prerelease=false \
+              -f name="Guarded Upgrade Path ${tag#v}" -F body=@.github/release-notes.md \
+              --jq .id)
           fi
           test -n "$id"
           echo "release_id=$id" >> "$GITHUB_OUTPUT"
