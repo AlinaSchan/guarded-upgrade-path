@@ -6,7 +6,8 @@ export DISPLAY=:1
 export PATH="/usr/local/share/nvm/current/bin:/usr/local/cargo/bin:$HOME/.cargo/bin:$PATH"
 export WEBKIT_DISABLE_COMPOSITING_MODE=1
 export WEBKIT_DISABLE_DMABUF_RENDERER=1
-if pgrep -f "guarded-upgrade-path" >/dev/null 2>&1; then
+# [t]arget: the bracket keeps this pgrep from matching its own (or a caller's) command line.
+if pgrep -f "[t]arget/debug/guarded-upgrade-path" >/dev/null 2>&1; then
   echo "App already running."
   exit 0
 fi
