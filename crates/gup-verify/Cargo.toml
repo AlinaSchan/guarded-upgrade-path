@@ -3,6 +3,7 @@ name = "gup-verify"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
+authors.workspace = true
 license.workspace = true
 description = "Independent verifier CLI for Guarded Upgrade Path artifact commitments and guardian authorizations. Reads tagged artifact files only; never trusts a displayed summary."
 

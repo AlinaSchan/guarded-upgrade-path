@@ -10,6 +10,7 @@ members = [
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.90"
+authors = ["Logos & Co"]
 license = "MIT"
 repository = "https://github.com/AlinaSchan/guarded-upgrade-path"
 

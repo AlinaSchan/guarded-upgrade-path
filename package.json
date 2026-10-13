@@ -26,5 +26,7 @@
     "typescript": "^5.6.3",
     "vite": "^6.0.3",
     "vitest": "^3.0.0"
-  }
+  },
+  "author": "Logos & Co",
+  "license": "MIT"
 }

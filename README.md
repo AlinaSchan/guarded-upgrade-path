@@ -1,6 +1,6 @@
 # Guarded Upgrade Path — interactive technical review sandbox
 
-A desktop review aid built around the *Guarded Upgrade Path* review draft
+A desktop review aid by Logos & Co, built around the *Guarded Upgrade Path* review draft
 (October 2026, prepared for Bertrand Juglas). It makes the draft's model
 operable so that its boundaries can be examined: an autonomous agent
 prepares an upgrade and commits to an artifact hash `H`; designated human
@@ -135,3 +135,7 @@ redefine the agreed engagement. See
 * [docs/POLICIES.md](docs/POLICIES.md) — every configurable policy, labelled as illustrative
 * [docs/REVIEWER_GUIDE.md](docs/REVIEWER_GUIDE.md) — a 15-minute walk-through
 * [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — crates, modules, state machine
+
+## License
+
+MIT. Copyright © 2026 Logos & Co. See [LICENSE](LICENSE).

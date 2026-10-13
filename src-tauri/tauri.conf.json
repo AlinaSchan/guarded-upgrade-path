@@ -40,7 +40,9 @@
     "windows": {
       "nsis": {
         "installMode": "currentUser",
-        "languages": ["English"]
+        "languages": [
+          "English"
+        ]
       },
       "wix": {
         "language": "en-US"
@@ -48,6 +50,8 @@
     },
     "macOS": {
       "minimumSystemVersion": "10.15"
-    }
+    },
+    "publisher": "Logos & Co",
+    "copyright": "© 2026 Logos & Co"
   }
 }
