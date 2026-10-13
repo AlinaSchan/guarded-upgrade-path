@@ -15,6 +15,8 @@ export default defineConfig({
   },
   build: {
     target: "es2021",
+    // Keep every asset a file: the desktop CSP allows fonts from 'self' only, not data: URIs.
+    assetsInlineLimit: 0,
     minify: process.env.TAURI_DEBUG ? false : "esbuild",
     sourcemap: !!process.env.TAURI_DEBUG,
   },

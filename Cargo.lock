@@ -1487,7 +1487,7 @@ dependencies = [
 
 [[package]]
 name = "guarded-upgrade-path"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "gup-domain",
  "serde",
@@ -1500,7 +1500,7 @@ dependencies = [
 
 [[package]]
 name = "gup-domain"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "ed25519-dalek",
  "hex",
@@ -1512,7 +1512,7 @@ dependencies = [
 
 [[package]]
 name = "gup-verify"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "gup-domain",
  "hex",
