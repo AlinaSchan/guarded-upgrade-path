@@ -1,0 +1,92 @@
+# Builds Windows (NSIS + MSI) and macOS (app + dmg, Apple silicon and Intel)
+# installers and attaches them to a DRAFT GitHub release. Publishing the
+# release is a manual step and stays subject to explicit authorization.
+# Linux installers are intentionally not built or published.
+
+name: Release (draft)
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build ${{ matrix.label }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest
+            label: macOS (Apple silicon)
+            args: "--target aarch64-apple-darwin"
+            cli: target/aarch64-apple-darwin/release/gup-verify
+            cli_name: gup-verify-macos-aarch64
+          - platform: macos-latest
+            label: macOS (Intel)
+            args: "--target x86_64-apple-darwin"
+            cli: target/x86_64-apple-darwin/release/gup-verify
+            cli_name: gup-verify-macos-x86_64
+          - platform: windows-latest
+            label: Windows (x64)
+            args: ""
+            cli: target/release/gup-verify.exe
+            cli_name: gup-verify-windows-x64.exe
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ". -> target"
+      - run: npm ci
+      - name: Build desktop bundles and create/update the draft release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.event_name == 'push' && github.ref_name || '' }}
+          releaseName: "Guarded Upgrade Path ${{ github.ref_name }}"
+          releaseBody: |
+            Review aid for the Guarded Upgrade Path review draft (October 2026).
+            Runs offline on a deterministic local model. Not production software; no external review has been completed.
+            Windows: NSIS installer (per-user) and MSI. macOS: .app / .dmg (unsigned; see README for Gatekeeper notes).
+            The gup-verify CLI is attached separately for out-of-process verification.
+          releaseDraft: true
+          prerelease: true
+          args: ${{ matrix.args }}
+      - name: Build verifier CLI
+        run: cargo build --release -p gup-verify ${{ matrix.args }}
+      - name: Attach verifier CLI to the draft release
+        if: github.event_name == 'push'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp "${{ matrix.cli }}" "${{ matrix.cli_name }}"
+          gh release upload "${{ github.ref_name }}" "${{ matrix.cli_name }}" --clobber
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'push'
+        with:
+          name: bundles-${{ matrix.cli_name }}
+          if-no-files-found: warn
+          path: |
+            target/**/release/bundle/**/*.exe
+            target/**/release/bundle/**/*.msi
+            target/**/release/bundle/**/*.dmg
+            target/release/bundle/**/*.exe
+            target/release/bundle/**/*.msi
+            ${{ matrix.cli }}

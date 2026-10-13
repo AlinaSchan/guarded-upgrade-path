@@ -1,0 +1,74 @@
+// Thin typed wrappers over Tauri commands. Nothing here decides anything.
+
+import { invoke } from "@tauri-apps/api/core";
+import type {
+  ActionResult,
+  AgentStep,
+  CandidateVariant,
+  Decision,
+  ExportResult,
+  FailureModeResult,
+  GuardianOutcome,
+  IncidentParams,
+  RecomputeResult,
+  ReviewNote,
+  Rung,
+  ScenarioView,
+  SurfaceComparison,
+  SurfaceMode,
+  SurfaceView,
+  TamperVariant,
+  VerifierReport,
+  WorkspaceView,
+} from "./types";
+
+export const api = {
+  workspace: () => invoke<WorkspaceView>("get_workspace"),
+  scenario: (key: string) => invoke<ScenarioView>("get_scenario", { key }),
+  agentStep: (key: string, step: AgentStep) => invoke<ScenarioView>("agent_step", { key, step }),
+  agentRun: (key: string) => invoke<ScenarioView>("agent_run", { key }),
+  setCandidateVariant: (key: string, variant: CandidateVariant) => invoke<ScenarioView>("set_candidate_variant", { key, variant }),
+  resetScenario: (key: string) => invoke<ScenarioView>("reset_scenario", { key }),
+  resetAll: () => invoke<WorkspaceView>("reset_all"),
+  surface: (key: string, mode: SurfaceMode) => invoke<SurfaceView>("get_surface", { key, mode }),
+  compareSurfaces: (key: string) => invoke<SurfaceComparison>("compare_surfaces", { key }),
+  setSurfaceMode: (key: string, mode: SurfaceMode) => invoke<ScenarioView>("set_surface_mode", { key, mode }),
+  guardianInspect: (key: string) => invoke<ScenarioView>("guardian_inspect", { key }),
+  guardianRecompute: (key: string) => invoke<RecomputeResult>("guardian_recompute", { key }),
+  guardianDecide: (key: string, guardianId: string, decision: Decision, note: string) =>
+    invoke<GuardianOutcome>("guardian_decide", { key, guardianId, decision, note }),
+  setQuorumPolicy: (key: string, policyId: string, m?: number, n?: number) => invoke<ScenarioView>("set_quorum_policy", { key, policyId, m, n }),
+  tamper: (key: string, variant: TamperVariant) => invoke<ScenarioView>("tamper", { key, variant }),
+  restoreCandidate: (key: string) => invoke<ScenarioView>("restore_candidate", { key }),
+  execute: (key: string) => invoke<ScenarioView>("execute", { key }),
+  verifyIndependently: (key: string) => invoke<VerifierReport>("verify_independently", { key }),
+  exportVerificationBundle: (key: string, directory: string) => invoke<ExportResult>("export_verification_bundle", { key, directory }),
+  assessRecovery: (key: string) => invoke<ScenarioView>("assess_recovery", { key }),
+  simulateUsersAct: (key: string, periods: number) => invoke<ScenarioView>("simulate_users_act", { key, periods }),
+  attemptCodeRevert: (key: string) => invoke<ScenarioView>("attempt_code_revert", { key }),
+  draftRecovery: (key: string) => invoke<ScenarioView>("draft_recovery", { key }),
+  incidentSetPolicy: (key: string, policyId: string) => invoke<ScenarioView>("incident_set_policy", { key, policyId }),
+  incidentSetParams: (key: string, params: IncidentParams) => invoke<ScenarioView>("incident_set_params", { key, params }),
+  incidentAgentRequest: (key: string, rung: Rung) => invoke<ActionResult>("incident_agent_request", { key, rung }),
+  incidentAgentLift: (key: string) => invoke<ActionResult>("incident_agent_lift", { key }),
+  incidentGuardiansLift: (key: string) => invoke<ScenarioView>("incident_guardians_lift", { key }),
+  incidentClose: (key: string) => invoke<ScenarioView>("incident_close", { key }),
+  advanceBlocks: (key: string, blocks: number) => invoke<ScenarioView>("advance_blocks", { key, blocks }),
+  runFailureMode: (key: string) => invoke<FailureModeResult>("run_failure_mode", { key }),
+  runAllFailureModes: () => invoke<FailureModeResult[]>("run_all_failure_modes"),
+  addNote: (note: ReviewNote) => invoke<ReviewNote[]>("add_note", { note }),
+  updateNote: (note: ReviewNote) => invoke<ReviewNote[]>("update_note", { note }),
+  deleteNote: (id: number) => invoke<ReviewNote[]>("delete_note", { id }),
+  notesMarkdownPreview: () => invoke<string>("notes_markdown_preview"),
+  exportNotesMarkdown: (path: string) => invoke<string>("export_notes_markdown", { path }),
+  exportObservationsMarkdown: (path: string) => invoke<string>("export_observations_markdown", { path }),
+  observationsMarkdownPreview: () => invoke<string>("observations_markdown_preview"),
+  setDarkMode: (enabled: boolean) => invoke<boolean>("set_dark_mode", { enabled }),
+  dataDir: () => invoke<string>("data_dir"),
+};
+
+export function errorText(e: unknown): string {
+  if (typeof e === "string") return e;
+  if (e && typeof e === "object" && "message" in e) return String((e as { message: unknown }).message);
+  return String(e);
+}

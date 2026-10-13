@@ -1,0 +1,17 @@
+# Rust
+/target
+**/target
+# Node
+node_modules
+dist
+# Tauri
+src-tauri/gen
+src-tauri/target
+# OS
+.DS_Store
+Thumbs.db
+# Local
+*.log
+/exports
+.llvm-mingw-bin.txt
+.winlibs-bin.txt

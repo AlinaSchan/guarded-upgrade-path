@@ -1,0 +1,18 @@
+[package]
+name = "gup-domain"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Domain engine for the Guarded Upgrade Path technical review sandbox: proposal, approval, execution, verification, recovery and incident models."
+
+[lib]
+name = "gup_domain"
+path = "src/lib.rs"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+hex.workspace = true
+ed25519-dalek.workspace = true
+thiserror.workspace = true

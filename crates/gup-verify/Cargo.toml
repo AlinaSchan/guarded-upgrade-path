@@ -1,0 +1,16 @@
+[package]
+name = "gup-verify"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Independent verifier CLI for Guarded Upgrade Path artifact commitments and guardian authorizations. Reads tagged artifact files only; never trusts a displayed summary."
+
+[[bin]]
+name = "gup-verify"
+path = "src/main.rs"
+
+[dependencies]
+gup-domain = { path = "../gup-domain" }
+serde.workspace = true
+serde_json.workspace = true
+hex.workspace = true
