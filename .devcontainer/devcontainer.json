@@ -2,7 +2,9 @@
   "name": "Guarded Upgrade Path (review sandbox)",
   "image": "mcr.microsoft.com/devcontainers/rust:1-1-bookworm",
   "features": {
-    "ghcr.io/devcontainers/features/node:1": { "version": "24" },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "24"
+    },
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/devcontainers/features/desktop-lite:1": {
       "password": "vscode",
@@ -10,13 +12,29 @@
       "vncPort": "5901"
     }
   },
-  "hostRequirements": { "cpus": 4, "memory": "8gb", "storage": "32gb" },
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "8gb",
+    "storage": "32gb"
+  },
   "onCreateCommand": "bash .devcontainer/setup.sh",
-  "forwardPorts": [6080, 1420],
+  "forwardPorts": [
+    6080,
+    1420
+  ],
   "portsAttributes": {
-    "6080": { "label": "Desktop (noVNC): the Tauri window appears here", "onAutoForward": "notify" },
-    "1420": { "label": "Vite dev server", "onAutoForward": "silent" },
-    "5901": { "label": "VNC", "onAutoForward": "ignore" }
+    "6080": {
+      "label": "Desktop (noVNC): the application window appears here",
+      "onAutoForward": "openBrowser"
+    },
+    "1420": {
+      "label": "Vite dev server",
+      "onAutoForward": "silent"
+    },
+    "5901": {
+      "label": "VNC",
+      "onAutoForward": "ignore"
+    }
   },
   "containerEnv": {
     "DISPLAY": ":1",
@@ -25,14 +43,23 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["rust-lang.rust-analyzer", "tauri-apps.tauri-vscode", "esbenp.prettier-vscode", "vitest.explorer"],
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "tauri-apps.tauri-vscode",
+        "esbenp.prettier-vscode",
+        "vitest.explorer"
+      ],
       "settings": {
         "rust-analyzer.check.command": "clippy",
         "editor.formatOnSave": true
       }
     },
     "codespaces": {
-      "openFiles": ["README.md", "docs/REVIEWER_GUIDE.md"]
+      "openFiles": [
+        "README.md",
+        "docs/REVIEWER_GUIDE.md"
+      ]
     }
-  }
+  },
+  "postStartCommand": "bash .devcontainer/start-app.sh"
 }

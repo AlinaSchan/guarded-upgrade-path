@@ -78,8 +78,10 @@ app. Then:
 npm run tauri dev
 ```
 
-and open the forwarded port **6080** (Desktop / noVNC, password `vscode`):
-the application window appears inside that web desktop. The CLI runs with
+or simply wait: at every start the Codespace launches the app by itself and
+opens the forwarded port **6080** (Desktop / noVNC, password `vscode`), where
+the application window appears. The first start compiles for a few minutes;
+`/tmp/tauri-dev.log` shows progress. The CLI runs with
 `cargo run -p gup-verify -- help`. No Linux installer is produced; the
 Codespace is for reviewing, running and testing the code.
 

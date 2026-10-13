@@ -1,0 +1,5 @@
+# Keep every text file at LF regardless of the platform it was edited on.
+* text=auto eol=lf
+*.png binary
+*.ico binary
+*.icns binary
