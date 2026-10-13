@@ -61,7 +61,7 @@ jobs:
           tagName: ${{ github.event_name == 'push' && github.ref_name || '' }}
           releaseName: "Guarded Upgrade Path ${{ github.ref_name }}"
           releaseBody: |
-            Review aid for the Guarded Upgrade Path review draft (October 2026), published by Logos & Co.
+            Review aid for the Guarded Upgrade Path review draft (October 2026), published by Logos (https://logos.co/).
             Runs offline on a deterministic local model. Not production software; no external review has been completed.
             Windows: NSIS installer (per-user) and MSI. macOS: .app / .dmg (unsigned; see README for Gatekeeper notes).
             The gup-verify CLI is attached separately for out-of-process verification.

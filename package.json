@@ -27,6 +27,10 @@
     "vite": "^6.0.3",
     "vitest": "^3.0.0"
   },
-  "author": "Logos & Co",
-  "license": "MIT"
+  "author": {
+    "name": "Logos",
+    "url": "https://logos.co/"
+  },
+  "license": "MIT",
+  "homepage": "https://logos.co/"
 }

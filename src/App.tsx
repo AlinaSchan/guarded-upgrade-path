@@ -200,7 +200,7 @@ export default function App() {
               {route.page === "audit" && <AuditPage />}
               {route.page === "scope" && <ScopePage />}
               <div className="footer">
-                <span>Logos & Co · review draft, October 2026 · prepared for Bertrand Juglas · desktop review aid v{ws.app_version}</span>
+                <span>Logos · logos.co · review draft, October 2026 · prepared for Bertrand Juglas · desktop review aid v{ws.app_version}</span>
                 <span>offline · deterministic local model · local test keys only</span>
               </div>
             </>

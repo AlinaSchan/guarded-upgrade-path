@@ -1,6 +1,6 @@
 # Reviewer guide
 
-This desktop program, built by Logos & Co, is a review aid for the *Guarded Upgrade
+This desktop program, built by Logos (logos.co), is a review aid for the *Guarded Upgrade
 Path* review draft (October 2026). It runs offline on a deterministic local model. It is
 not production software, it has not been externally reviewed, and nothing in
 it answers the questions the draft asks.
