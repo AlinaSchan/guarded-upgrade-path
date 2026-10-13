@@ -16,6 +16,33 @@ a deterministic local model. No external review of it has been completed.
 The hypothesis it explores is not presented as an established or universally
 safe governance model.
 
+## Download (Windows and macOS)
+
+Installers are on the releases page:
+**https://github.com/AlinaSchan/guarded-upgrade-path/releases/latest**
+
+* **Windows 10/11 (x64):** the `*_x64-setup.exe` installer (installs per user,
+  no administrator rights) or the `*_x64_en-US.msi`. The installer is unsigned,
+  so SmartScreen may show "Windows protected your PC" once: *More info → Run
+  anyway*.
+* **macOS:** `*_aarch64.dmg` for Apple silicon (M1 or later), `*_x64.dmg` for
+  Intel. Drag the app to Applications. The app is unsigned and not notarized,
+  so the first launch is blocked by Gatekeeper: either *System Settings →
+  Privacy & Security → Open Anyway* after the first attempt, or clear the
+  quarantine flag once:
+
+  ```bash
+  xattr -dr com.apple.quarantine "/Applications/Guarded Upgrade Path.app"
+  ```
+
+* **Linux and web browsers are not supported.** No Linux installer exists, and
+  on any platform other than Windows or macOS the application refuses to start
+  with an error (`src-tauri/src/unsupported.rs`). The interface is not a web
+  application: opened outside the desktop shell it only shows a notice.
+
+The verifier CLI (`gup-verify`) for Windows and macOS is attached to the same
+release.
+
 ## What is genuine and what is simulated
 
 * Genuine: recomputation of `H` (SHA-256 over a canonical manifest and the
@@ -34,7 +61,7 @@ Details: [docs/VERIFICATION.md](docs/VERIFICATION.md) and
 ```
 crates/gup-domain   domain engine (Rust library)
 crates/gup-verify   independent verifier CLI (Rust binary)
-src-tauri           Tauri 2 desktop shell
+src-tauri           Tauri 2 desktop shell (Windows and macOS only)
 src                 React + TypeScript frontend
 docs                traceability, verification, simulation scope, policies, reviewer guide, architecture
 .github/workflows   CI and draft-release packaging
@@ -44,7 +71,9 @@ docs                traceability, verification, simulation scope, policies, revi
 
 Prerequisites: a Rust stable toolchain, Node.js 24 (LTS), and the Tauri 2
 platform prerequisites (on Windows: Microsoft C++ Build Tools and the WebView2
-runtime; on macOS: Xcode command line tools).
+runtime; on macOS: Xcode command line tools). The desktop application builds
+and runs on Windows and macOS only; on any other platform `src-tauri` compiles
+to a stub that prints an error and exits.
 
 ```bash
 npm ci
@@ -66,55 +95,22 @@ for Tauri because its `dlltool` cannot run. A GNU-linked binary loads
 `WebView2Loader.dll` dynamically; the bundler places that file next to the
 executable in the installers.
 
-## Web version (no installation)
-
-The same application runs in the browser at
-**https://alinaschan.github.io/guarded-upgrade-path/**: the Rust engine is
-compiled to WebAssembly (`crates/gup-wasm`), the UI is identical, and the
-workspace is kept in the browser's local storage. Nothing is sent anywhere;
-exports arrive as downloads (the verification bundle as a ZIP). The page is
-published by `.github/workflows/pages.yml` on every push to `main`.
-
-To build it locally:
-
-```bash
-rustup target add wasm32-unknown-unknown
-cargo install wasm-bindgen-cli --version "=$(grep -A1 '^name = "wasm-bindgen"$' Cargo.lock | grep version | sed 's/.*"\(.*\)"/\1/')" --locked
-npm run build:wasm
-VITE_WEB=1 npm run build      # add VITE_BASE=/guarded-upgrade-path/ for GitHub Pages
-npm run preview
-```
-
-## GitHub Codespaces
-
-The repository ships a dev container (`.devcontainer/`) with the Rust
-toolchain, Node 24, the Tauri 2 Linux prerequisites and a lightweight web
-desktop. Open the repository in a Codespace (4 cores recommended); setup
-installs dependencies, runs the Rust and frontend tests and pre-builds the
-app. Then:
-
-```bash
-npm run tauri dev
-```
-
-or simply wait: at every start the Codespace launches the app by itself and
-opens the forwarded port **6080** (Desktop / noVNC, password `vscode`), where
-the application window appears. The first start compiles for a few minutes;
-`/tmp/tauri-dev.log` shows progress. The CLI runs with
-`cargo run -p gup-verify -- help`. No Linux installer is produced; the
-Codespace is for reviewing, running and testing the code.
-
 ## Packaging and releases
 
 * Windows: NSIS installer (per-user) and MSI. macOS: `.app` and `.dmg`
   (Apple silicon and Intel). Configured in `src-tauri/tauri.*.conf.json`.
-* Linux installers are not built or published (`tauri.linux.conf.json`
-  disables bundling; no Linux job exists).
+* Linux: not supported. No Linux installer is built (`tauri.linux.conf.json`
+  disables bundling; no Linux job exists), and on any target other than
+  Windows or macOS `src-tauri` compiles to a stub that prints an error and
+  exits (`src-tauri/src/unsupported.rs`; Tauri itself is not compiled there,
+  see the target-specific dependencies in `src-tauri/Cargo.toml`). CI checks
+  that refusal on Linux.
 * `.github/workflows/release.yml` builds on a `v*` tag and creates a
-  **draft** release; publishing it is a manual step and remains subject to
-  explicit authorization. Installers are unsigned.
-* `.github/workflows/ci.yml` runs formatting, Clippy, Rust tests, the
-  frontend type-check, bundle and tests, and a packaging smoke build.
+  **draft** release; the draft is published by hand after the assets have
+  been checked. Installers are unsigned and not notarized.
+* `.github/workflows/ci.yml` runs formatting, Clippy, Rust tests, the Linux
+  refusal check, the frontend type-check, bundle and tests, and a packaging
+  smoke build on demand.
 
 ## Using the verifier outside the application
 

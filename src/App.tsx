@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { api, errorText } from "./api";
-import { isTauri } from "./platform";
+import { openExternal } from "./platform";
 import { LogosMark, LogosWordmark } from "./components/LogosBrand";
 import type { ScenarioView, WorkspaceView } from "./types";
 import { Overview } from "./views/Overview";
@@ -149,17 +149,18 @@ export default function App() {
       <div className="app">
         <div className="topbar">
           <div className="brand">
-            {isTauri() ? (
-              <span className="brand-logo" title="Logos">
-                <LogosMark size={22} />
-                <LogosWordmark height={13} />
-              </span>
-            ) : (
-              <a className="brand-logo" href="https://logos.co/" target="_blank" rel="noreferrer" title="Logos (logos.co)">
-                <LogosMark size={22} />
-                <LogosWordmark height={13} />
-              </a>
-            )}
+            <a
+              className="brand-logo"
+              href="https://logos.co/"
+              title="Logos (logos.co)"
+              onClick={(e) => {
+                e.preventDefault();
+                openExternal("https://logos.co/").catch(() => undefined);
+              }}
+            >
+              <LogosMark size={22} />
+              <LogosWordmark height={13} />
+            </a>
             <span className="brand-sep" />
             <span className="title">Guarded Upgrade Path</span>
             <span className="sub">interactive technical review sandbox · review draft, October 2026</span>
@@ -217,7 +218,7 @@ export default function App() {
                 <span>
                   <LogosMark size={12} /> Logos · logos.co · review draft, October 2026 · prepared for Bertrand Juglas · review aid v{ws.app_version}
                 </span>
-                <span>{isTauri() ? "offline desktop build" : "browser build · state kept in this browser only"} · deterministic local model · local test keys only</span>
+                <span>offline desktop build · deterministic local model · local test keys only</span>
               </div>
             </>
           )}

@@ -55,7 +55,11 @@ Every transition is validated in Rust; invalid requests return
 
 ## Desktop shell (`src-tauri`)
 
-`main.rs` holds `AppState { Mutex<Workspace>, data_dir }`. Every mutating
+`main.rs` is the entry point: on Windows and macOS it starts `desktop.rs`;
+on every other target it compiles only `unsupported.rs`, a stub that prints
+an error and exits (the Tauri dependencies are target-specific in
+`Cargo.toml`, so nothing else is built there).
+`desktop.rs` holds `AppState { Mutex<Workspace>, data_dir }`. Every mutating
 command runs through `mutate`, which persists `workspace.json` (atomic
 rename) and appends new audit events to `audit.jsonl`. Timestamps are added
 at persistence time. Exports write Markdown or a verification bundle to paths
@@ -66,7 +70,9 @@ chosen through the native dialog plugin. No network access anywhere.
 `App.tsx` holds the workspace view, per-case scenario views and the route.
 Pages: Overview, Scenario (Stage A), Approval (Stage B), Execution (Stage C),
 Recovery, Incident, Failure modes, Review Lab, Questions, Notes, Audit, Scope.
-`types.ts` mirrors the Rust view structs; `api.ts` wraps `invoke`.
+`types.ts` mirrors the Rust view structs; `api.ts` wraps `invoke`. Outside
+the desktop shell (a plain browser tab) `main.tsx` renders only a notice
+(`components/DesktopOnly.tsx`); there is no web version.
 
 ## Testing
 

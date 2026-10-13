@@ -86,8 +86,8 @@ export function ScopePage() {
           workspace and audit log: <span className="mono">{dir || "…"}</span>
         </div>
         <div className="small muted">
-          The desktop build runs offline and the browser build runs entirely inside the page: in both, nothing is sent anywhere and exports go only where the reviewer chooses
-          (native dialogs on the desktop, downloads in the browser). Version {ws.app_version}.
+          The desktop application runs offline: nothing is sent anywhere, and exports go only where the reviewer chooses through the native dialogs. It is built for Windows
+          and macOS only; there is no browser or Linux version. Version {ws.app_version}.
         </div>
       </Section>
     </div>

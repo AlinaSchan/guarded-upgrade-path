@@ -16,7 +16,10 @@ path = "src/main.rs"
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 
-[dependencies]
+# The desktop shell is distributed for Windows and macOS only. On every other
+# target the binary is a stub that refuses to start (src/unsupported.rs), so the
+# engine, Tauri and its platform libraries are compiled only for those two.
+[target.'cfg(any(windows, target_os = "macos"))'.dependencies]
 tauri = { version = "2", features = [] }
 tauri-plugin-dialog = "2"
 tauri-plugin-opener = "2"

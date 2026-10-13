@@ -28,7 +28,7 @@ Paths are relative to the repository root. `D` = `crates/gup-domain/src`,
 | Configurable m-of-n; 2-of-3 as a preset only | `D/guardians.rs` (`quorum_presets`, `QuorumPolicy::custom`), `D/engine.rs` (`set_quorum_policy`) | `engine::tests::quorum_policy_is_configurable` |
 | Proposer never sets its own approval requirements or risk class | no such field exists; `docs/POLICIES.md` | — |
 | Stage C: authorization referring to H, independent verification, apply only the payload, report, post-state verification, escalate | `D/executor.rs` | `engine::tests::full_happy_path_a`, `substitution_after_approval_is_refused` |
-| Executor must not modify or substitute the payload; frontend never decides authorization | `D/executor.rs` (installs `artifact.bundle()` as handed), `T/main.rs` (commands only forward) | `engine::tests::substitution_after_approval_is_refused` |
+| Executor must not modify or substitute the payload; frontend never decides authorization | `D/executor.rs` (installs `artifact.bundle()` as handed), `T/desktop.rs` (commands only forward) | `engine::tests::substitution_after_approval_is_refused` |
 | Primary visualization follows the p.1 diagram | `F/views/Overview.tsx`, `F/styles.css` (`.diagram`) | — |
 
 ## 3. Artifact commitment and independent verification (correction §3; draft p.2 "approved payload hash", p.4 "Reviewed is not executed")
@@ -105,7 +105,7 @@ Paths are relative to the repository root. `D` = `crates/gup-domain/src`,
 | requirement | implementation |
 | --- | --- |
 | Select case; compare surfaces; verify H; checked vs assumed; modified payloads; quorum policies; economic effect; incident limits; failed execution; rollback vs recovery; deterministic reset; export observations | `F/views/ReviewLab.tsx` (links to each tool), `D/engine.rs` (`reset_scenario`, `reset_all`), `D/exports.rs` |
-| Local review notes with the five fields, Markdown export, never presented as supplied/approved | `D/notes.rs`, `T/main.rs` (`add_note`, `export_notes_markdown`), `F/views/NotesPage.tsx` |
+| Local review notes with the five fields, Markdown export, never presented as supplied/approved | `D/notes.rs`, `T/desktop.rs` (`add_note`, `export_notes_markdown`), `F/views/NotesPage.tsx` |
 
 ## 11. Questions for review (correction §11; draft p.4)
 
@@ -145,11 +145,11 @@ dashboards, charts or wallet widgets.
 | 11 | recovery covers code, state, effects, authorization | `D/recovery.rs` | tested |
 | 12 | incident powers scoped, documented as hypotheses | `D/incident.rs`, `docs/POLICIES.md` | tested |
 | 13 | five questions link to functionality | `D/questions.rs` | tested |
-| 14 | local persistence of state and audit | `T/main.rs` | verified by running the desktop app: `workspace.json` and `audit.jsonl` written to the app data directory |
-| 15 | notes export | `T/main.rs`, `D/notes.rs` | Markdown generation covered by the engine; the native save dialog path was not exercised automatically |
+| 14 | local persistence of state and audit | `T/desktop.rs` | verified by running the desktop app: `workspace.json` and `audit.jsonl` written to the app data directory |
+| 15 | notes export | `T/desktop.rs`, `D/notes.rs` | Markdown generation covered by the engine; the native save dialog path was not exercised automatically |
 | 16 | offline after installation | no network code anywhere | by construction |
 | 17 | Windows and macOS release configurations | `src-tauri/tauri.*.conf.json`, `.github/workflows/release.yml` | configured; Windows NSIS and MSI bundles built locally (GNU toolchain); macOS bundles only via the workflow (no macOS machine available) |
-| 18 | Linux installers not published | `tauri.linux.conf.json` (`bundle.active=false`), no Linux job | configured |
+| 18 | Linux installers not published; the application does not run on Linux | `tauri.linux.conf.json` (`bundle.active=false`), no Linux job; `T/main.rs` + `T/unsupported.rs` (on any target other than Windows/macOS the binary only prints an error and exits; Tauri is not compiled there) | configured; the refusal is checked in CI on Linux |
 | 19 | simulation scope documented | `docs/SIMULATION_SCOPE.md` | — |
 | 20 | README makes no production/review claims | `README.md` | — |
 

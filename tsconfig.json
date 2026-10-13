@@ -21,13 +21,7 @@
     "noEmit": true,
     "types": [
       "vite/client"
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "@gup-wasm": [
-        "./src/gup-wasm.d.ts"
-      ]
-    }
+    ]
   },
   "include": [
     "src"

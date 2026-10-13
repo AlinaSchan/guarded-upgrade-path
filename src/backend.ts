@@ -1,5 +1,4 @@
-// Desktop backend: thin typed wrappers over Tauri commands. The browser build
-// implements the same `Api` shape on top of the WebAssembly engine.
+// Desktop backend: thin typed wrappers over Tauri commands.
 
 import { invoke } from "@tauri-apps/api/core";
 import type {

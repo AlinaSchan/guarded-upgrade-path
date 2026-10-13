@@ -914,3 +914,29 @@ ul.plain li {
   background: var(--band);
   padding: 8px 10px;
 }
+
+/* Notice shown outside the desktop shell (a plain browser tab). */
+.desktop-only {
+  max-width: 640px;
+  margin: 14vh auto 0;
+  padding: 0 24px;
+}
+
+.desktop-only .brand-logo {
+  margin-bottom: 28px;
+}
+
+.desktop-only h1 {
+  font-size: 22px;
+  margin: 0 0 14px;
+}
+
+.desktop-only p {
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+.desktop-only a {
+  color: var(--accent-ink);
+  word-break: break-all;
+}

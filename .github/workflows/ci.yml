@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # macOS is covered by the release workflow (tag builds) to keep Actions minutes low on a private repository.
+        # macOS is covered by the release workflow (tag builds) and the on-demand package job.
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -23,16 +23,25 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
-          targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
       - name: Format
         run: cargo fmt --all -- --check
       - name: Clippy
         run: cargo clippy -p gup-domain -p gup-verify --all-targets -- -D warnings
       - name: Tests
-        run: cargo test -p gup-domain -p gup-verify -p gup-wasm
-      - name: Engine compiles to WebAssembly
-        run: cargo check -p gup-wasm --target wasm32-unknown-unknown
+        run: cargo test -p gup-domain -p gup-verify
+      - name: Desktop app refuses to start on Linux
+        # The application is distributed for Windows and macOS only; on Linux the
+        # binary must exit with an error instead of starting.
+        if: runner.os == 'Linux'
+        run: |
+          set +e
+          out=$(cargo run -q -p guarded-upgrade-path 2>&1)
+          code=$?
+          set -e
+          printf '%s\n' "$out"
+          test "$code" -ne 0
+          printf '%s\n' "$out" | grep -q "Windows and macOS only"
 
   frontend:
     name: Frontend (type-check, bundle, unit tests)

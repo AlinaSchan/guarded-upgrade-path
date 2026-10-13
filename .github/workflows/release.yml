@@ -1,7 +1,7 @@
 # Builds Windows (NSIS + MSI) and macOS (app + dmg, Apple silicon and Intel)
-# installers and attaches them to a DRAFT GitHub release. Publishing the
-# release is a manual step and stays subject to explicit authorization.
-# Linux installers are intentionally not built or published.
+# installers and attaches them to a DRAFT GitHub release. The draft is
+# published by hand once the assets have been checked. Linux installers are
+# intentionally not built: the application runs on Windows and macOS only.
 
 name: Release (draft)
 
@@ -63,10 +63,16 @@ jobs:
           releaseBody: |
             Review aid for the Guarded Upgrade Path review draft (October 2026), published by Logos (https://logos.co/).
             Runs offline on a deterministic local model. Not production software; no external review has been completed.
-            Windows: NSIS installer (per-user) and MSI. macOS: .app / .dmg (unsigned; see README for Gatekeeper notes).
-            The gup-verify CLI is attached separately for out-of-process verification.
+
+            **Windows 10/11 (x64):** download the `*_x64-setup.exe` installer (installs per user, no administrator rights) or the `*_x64_en-US.msi`. The installer is unsigned, so SmartScreen may show "Windows protected your PC" once: *More info → Run anyway*.
+
+            **macOS:** download `*_aarch64.dmg` for Apple silicon (M1 or later) or `*_x64.dmg` for Intel, and drag the app to Applications. The app is unsigned and not notarized, so the first launch is blocked by Gatekeeper: either *System Settings → Privacy & Security → Open Anyway* after the first attempt, or clear the quarantine flag once with `xattr -dr com.apple.quarantine "/Applications/Guarded Upgrade Path.app"`.
+
+            **Linux and web browsers are not supported.** There is no Linux build; on any platform other than Windows or macOS the application refuses to start with an error.
+
+            The `gup-verify` CLI is attached separately for out-of-process verification of an exported bundle.
           releaseDraft: true
-          prerelease: true
+          prerelease: false
           args: ${{ matrix.args }}
       - name: Build verifier CLI
         run: cargo build --release -p gup-verify ${{ matrix.args }}

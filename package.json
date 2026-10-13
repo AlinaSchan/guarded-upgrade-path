@@ -9,8 +9,7 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "test": "vitest run",
-    "build:wasm": "cargo build --release --target wasm32-unknown-unknown -p gup-wasm && wasm-bindgen --target web --out-dir src/wasm target/wasm32-unknown-unknown/release/gup_wasm.wasm"
+    "test": "vitest run"
   },
   "dependencies": {
     "@fontsource-variable/public-sans": "^5.3.0",

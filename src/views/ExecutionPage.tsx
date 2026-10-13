@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { chooseDirectory, isTauri, revealPath } from "../platform";
+import { chooseDirectory, revealPath } from "../platform";
 import { api } from "../api";
 import { ScenarioPicker, useApp } from "../App";
 import { fmt, Hash, Kv, Notice, Pill, Section } from "../components/common";
@@ -245,11 +245,9 @@ export function ExecutionPage() {
                 <li key={f}>{f}</li>
               ))}
             </ul>
-            {isTauri() && (
-              <button className="btn small" onClick={() => revealPath(exported.files[0] ?? exported.directory).catch(() => undefined)}>
-                reveal in file manager
-              </button>
-            )}
+            <button className="btn small" onClick={() => revealPath(exported.files[0] ?? exported.directory).catch(() => undefined)}>
+              reveal in file manager
+            </button>
           </div>
         )}
         <div className="card quiet">
