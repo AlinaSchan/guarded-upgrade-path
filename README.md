@@ -66,6 +66,25 @@ for Tauri because its `dlltool` cannot run. A GNU-linked binary loads
 `WebView2Loader.dll` dynamically; the bundler places that file next to the
 executable in the installers.
 
+## Web version (no installation)
+
+The same application runs in the browser at
+**https://alinaschan.github.io/guarded-upgrade-path/**: the Rust engine is
+compiled to WebAssembly (`crates/gup-wasm`), the UI is identical, and the
+workspace is kept in the browser's local storage. Nothing is sent anywhere;
+exports arrive as downloads (the verification bundle as a ZIP). The page is
+published by `.github/workflows/pages.yml` on every push to `main`.
+
+To build it locally:
+
+```bash
+rustup target add wasm32-unknown-unknown
+cargo install wasm-bindgen-cli --version "=$(grep -A1 '^name = "wasm-bindgen"$' Cargo.lock | grep version | sed 's/.*"\(.*\)"/\1/')" --locked
+npm run build:wasm
+VITE_WEB=1 npm run build      # add VITE_BASE=/guarded-upgrade-path/ for GitHub Pages
+npm run preview
+```
+
 ## GitHub Codespaces
 
 The repository ships a dev container (`.devcontainer/`) with the Rust

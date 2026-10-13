@@ -23,13 +23,16 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
+          targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
       - name: Format
         run: cargo fmt --all -- --check
       - name: Clippy
         run: cargo clippy -p gup-domain -p gup-verify --all-targets -- -D warnings
       - name: Tests
-        run: cargo test -p gup-domain -p gup-verify
+        run: cargo test -p gup-domain -p gup-verify -p gup-wasm
+      - name: Engine compiles to WebAssembly
+        run: cargo check -p gup-wasm --target wasm32-unknown-unknown
 
   frontend:
     name: Frontend (type-check, bundle, unit tests)

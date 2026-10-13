@@ -9,7 +9,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:wasm": "cargo build --release --target wasm32-unknown-unknown -p gup-wasm && wasm-bindgen --target web --out-dir src/wasm target/wasm32-unknown-unknown/release/gup_wasm.wasm"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.0",

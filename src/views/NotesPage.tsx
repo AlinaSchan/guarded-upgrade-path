@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { save } from "@tauri-apps/plugin-dialog";
+import { chooseSavePath } from "../platform";
 import { api } from "../api";
 import { useApp } from "../App";
 import { Notice, Section } from "../components/common";
@@ -28,7 +28,7 @@ export function NotesPage() {
   };
 
   const exportMd = async () => {
-    const path = await save({ defaultPath: "guarded-upgrade-path-review-notes.md", filters: [{ name: "Markdown", extensions: ["md"] }] });
+    const path = await chooseSavePath("guarded-upgrade-path-review-notes.md");
     if (!path) return;
     const written = await run(() => api.exportNotesMarkdown(path));
     if (written) setSavedTo(written);

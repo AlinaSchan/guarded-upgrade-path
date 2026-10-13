@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { open } from "@tauri-apps/plugin-dialog";
-import { revealItemInDir } from "@tauri-apps/plugin-opener";
+import { chooseDirectory, isTauri, revealPath } from "../platform";
 import { api } from "../api";
 import { ScenarioPicker, useApp } from "../App";
 import { fmt, Hash, Kv, Notice, Pill, Section } from "../components/common";
@@ -73,8 +72,8 @@ export function ExecutionPage() {
   const mismatch = claimed && held && claimed !== held;
 
   const exportBundle = async () => {
-    const dir = await open({ directory: true, multiple: false, title: "Choose a folder for the verification bundle" });
-    if (!dir || typeof dir !== "string") return;
+    const dir = await chooseDirectory();
+    if (!dir) return;
     const r = await run(() => api.exportVerificationBundle(v.key, dir));
     if (r) setExported(r);
   };
@@ -246,9 +245,11 @@ export function ExecutionPage() {
                 <li key={f}>{f}</li>
               ))}
             </ul>
-            <button className="btn small" onClick={() => revealItemInDir(exported.files[0] ?? exported.directory).catch(() => undefined)}>
-              reveal in file manager
-            </button>
+            {isTauri() && (
+              <button className="btn small" onClick={() => revealPath(exported.files[0] ?? exported.directory).catch(() => undefined)}>
+                reveal in file manager
+              </button>
+            )}
           </div>
         )}
         <div className="card quiet">

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { save } from "@tauri-apps/plugin-dialog";
+import { chooseSavePath } from "../platform";
 import { api } from "../api";
 import { ScenarioPicker, useApp } from "../App";
 import { Notice, Section } from "../components/common";
@@ -22,7 +22,7 @@ export function ReviewLab() {
   const v = scenarios[active];
 
   const exportObservations = async () => {
-    const path = await save({ defaultPath: "guarded-upgrade-path-observations.md", filters: [{ name: "Markdown", extensions: ["md"] }] });
+    const path = await chooseSavePath("guarded-upgrade-path-observations.md");
     if (!path) return;
     const written = await run(() => api.exportObservationsMarkdown(path));
     if (written) setSavedTo(written);

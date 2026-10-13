@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { api, errorText } from "./api";
+import { isTauri } from "./platform";
 import type { ScenarioView, WorkspaceView } from "./types";
 import { Overview } from "./views/Overview";
 import { ScenarioPage } from "./views/ScenarioPage";
@@ -201,7 +202,7 @@ export default function App() {
               {route.page === "scope" && <ScopePage />}
               <div className="footer">
                 <span>Logos · logos.co · review draft, October 2026 · prepared for Bertrand Juglas · desktop review aid v{ws.app_version}</span>
-                <span>offline · deterministic local model · local test keys only</span>
+                <span>{isTauri() ? "offline desktop build" : "browser build · state kept in this browser only"} · deterministic local model · local test keys only</span>
               </div>
             </>
           )}

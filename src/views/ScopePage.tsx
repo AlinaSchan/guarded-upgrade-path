@@ -86,7 +86,8 @@ export function ScopePage() {
           workspace and audit log: <span className="mono">{dir || "…"}</span>
         </div>
         <div className="small muted">
-          The application runs offline. Nothing is sent anywhere; exports are written only where the reviewer chooses. Version {ws.app_version}.
+          The desktop build runs offline and the browser build runs entirely inside the page: in both, nothing is sent anywhere and exports go only where the reviewer chooses
+          (native dialogs on the desktop, downloads in the browser). Version {ws.app_version}.
         </div>
       </Section>
     </div>

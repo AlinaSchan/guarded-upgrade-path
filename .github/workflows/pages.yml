@@ -1,0 +1,64 @@
+# Browser build of the review sandbox (the Rust engine compiled to
+# WebAssembly, same UI) published on GitHub Pages. Source: GitHub Actions.
+
+name: GitHub Pages (web build)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - name: Read the wasm-bindgen version from Cargo.lock
+        id: wb
+        run: echo "version=$(grep -A1 '^name = "wasm-bindgen"$' Cargo.lock | grep version | sed 's/.*"\(.*\)"/\1/')" >> "$GITHUB_OUTPUT"
+      - uses: taiki-e/cache-cargo-install-action@v2
+        with:
+          tool: wasm-bindgen-cli@${{ steps.wb.outputs.version }}
+      - run: npm ci
+      - name: Engine to WebAssembly
+        run: npm run build:wasm
+      - name: Web bundle
+        run: npm run build
+        env:
+          VITE_WEB: "1"
+          VITE_BASE: /guarded-upgrade-path/
+      - run: cp dist/index.html dist/404.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
