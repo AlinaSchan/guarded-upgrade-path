@@ -3,11 +3,14 @@
 # so that opening the forwarded port 6080 shows the application window without any further steps.
 cd "$(dirname "$0")/.." || exit 0
 export DISPLAY=:1
+export PATH="/usr/local/share/nvm/current/bin:/usr/local/cargo/bin:$HOME/.cargo/bin:$PATH"
 export WEBKIT_DISABLE_COMPOSITING_MODE=1
 export WEBKIT_DISABLE_DMABUF_RENDERER=1
 if pgrep -f "guarded-upgrade-path" >/dev/null 2>&1; then
   echo "App already running."
   exit 0
 fi
-nohup npm run tauri dev >/tmp/tauri-dev.log 2>&1 &
+# setsid + nohup: survive the end of the Codespaces lifecycle command that launches this script.
+setsid nohup bash -c 'exec npm run tauri dev' >/tmp/tauri-dev.log 2>&1 </dev/null &
+disown || true
 echo "Starting the Guarded Upgrade Path app (first start compiles for a few minutes). Open port 6080, password 'vscode'. Log: /tmp/tauri-dev.log"

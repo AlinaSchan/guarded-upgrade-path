@@ -2,6 +2,7 @@
 name = "guarded-upgrade-path"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
 description = "Guarded Upgrade Path — interactive technical review sandbox (desktop app)"
 default-run = "guarded-upgrade-path"

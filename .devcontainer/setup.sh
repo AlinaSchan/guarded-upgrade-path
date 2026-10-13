@@ -13,7 +13,11 @@ sudo apt-get install -y --no-install-recommends \
   libgtk-3-dev pkg-config patchelf xdg-utils
 sudo rm -rf /var/lib/apt/lists/*
 
+# The base image may ship an older stable; Tauri 2.12 needs rustc 1.90 or newer.
+rustup update stable || sudo -E env "PATH=$PATH" rustup update stable
+rustup default stable
 rustup component add clippy rustfmt
+rustc --version
 
 npm ci
 
