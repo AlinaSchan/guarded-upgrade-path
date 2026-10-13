@@ -3,40 +3,52 @@
    changes hands or a question is open. */
 
 :root {
-  --paper: #fbfaf7;
-  --paper-2: #f4f2ec;
-  --ink: #2b2b2b;
-  --ink-2: #4a4a4a;
-  --muted: #7a776f;
-  --line: #d9d4c7;
-  --line-2: #e8e4da;
-  --ochre: #b5862c;
-  --ochre-2: #8f6a1f;
-  --band: #f3ead6;
-  --band-2: #ead9b4;
-  --ok: #3f6b3f;
-  --ok-bg: #e9f0e6;
+  /* Logos identity (logos.co): off-white ground, deep teal-black ink, grey-green
+     lines, yellow for the moments where authority changes hands or a question
+     stays open, cyan as a quiet secondary tint. */
+  --paper: #f5f5ef;
+  --paper-2: #ebece5;
+  --ink: #152521;
+  --ink-2: #2f3d39;
+  --muted: #848e88;
+  --line: #dbddd7;
+  --line-2: #e7e8e2;
+  --accent: #ffd328;
+  --accent-ink: #5f4b00;
+  --accent-tint: #fff3bf;
+  --accent-tint-2: #f7df7a;
+  --cyan: #c7f3ff;
+  --ok: #2f5f45;
+  --ok-bg: #e2efe6;
   --bad: #8c3b2e;
   --bad-bg: #f5e6e2;
-  --serif: "Source Serif Pro", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, "Times New Roman", serif;
-  --mono: "IBM Plex Mono", "Cascadia Mono", "Consolas", "SF Mono", Menlo, monospace;
-  --radius: 3px;
+  /* Backward-compatible aliases used across the stylesheet. */
+  --ochre: var(--accent);
+  --ochre-2: var(--accent-ink);
+  --band: var(--accent-tint);
+  --band-2: var(--accent-tint-2);
+  --sans: "Public Sans Variable", "Public Sans", "Helvetica Neue", Arial, sans-serif;
+  --display: "Fira Code", "Fira Mono", "Cascadia Mono", Consolas, monospace;
+  --serif: var(--sans);
+  --mono: "Fira Code", "Fira Mono", "Cascadia Mono", Consolas, monospace;
+  --radius: 2px;
 }
 
 :root[data-theme="dark"] {
-  --paper: #1d1c1a;
-  --paper-2: #262522;
-  --ink: #e6e2d8;
-  --ink-2: #cfcac0;
-  --muted: #9a958a;
-  --line: #3d3a34;
-  --line-2: #2f2d29;
-  --ochre: #d2a24a;
-  --ochre-2: #e2b866;
-  --band: #2f2a1f;
-  --band-2: #4a4029;
+  --paper: #152521;
+  --paper-2: #1d2f2a;
+  --ink: #f5f5ef;
+  --ink-2: #d8ddd7;
+  --muted: #848e88;
+  --line: #30423d;
+  --line-2: #243631;
+  --accent: #ffd328;
+  --accent-ink: #ffd328;
+  --accent-tint: #2b3220;
+  --accent-tint-2: #4a4a1f;
+  --cyan: #2a4c55;
   --ok: #9ec49a;
-  --ok-bg: #243024;
+  --ok-bg: #203329;
   --bad: #e09c8e;
   --bad-bg: #3a2622;
 }
@@ -55,7 +67,7 @@ body,
 body {
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -69,9 +81,9 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: var(--serif);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
   margin: 0 0 0.35em;
   color: var(--ink);
 }
@@ -159,8 +171,45 @@ hr {
 }
 
 .topbar .title {
-  font-size: 17px;
-  font-weight: 600;
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand-logo:hover {
+  color: var(--accent-ink);
+}
+
+.brand-sep {
+  width: 1px;
+  height: 22px;
+  background: var(--line);
+}
+
+.topbar .title {
+  white-space: nowrap;
+}
+
+@media (max-width: 1180px) {
+  .topbar .sub {
+    display: none;
+  }
 }
 
 .topbar .sub {
@@ -262,6 +311,7 @@ hr {
 
 .tag.simulated {
   border-style: dashed;
+  background: var(--cyan);
 }
 
 .tag.assumed {
@@ -438,8 +488,8 @@ tr.clickable:hover td {
 button.btn,
 .btn {
   font: inherit;
-  font-size: 13.5px;
-  font-family: var(--serif);
+  font-size: 12.5px;
+  font-family: var(--display);
   padding: 6px 12px;
   border: 1px solid var(--ink);
   border-radius: var(--radius);
@@ -461,6 +511,12 @@ button.btn,
 .btn.primary {
   background: var(--ink);
   color: var(--paper);
+}
+
+.btn.primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #152521;
 }
 
 .btn.ochre {
@@ -536,7 +592,8 @@ label.field span {
 
 .segmented button {
   font: inherit;
-  font-size: 13px;
+  font-family: var(--display);
+  font-size: 12.5px;
   padding: 5px 12px;
   border: 0;
   background: transparent;

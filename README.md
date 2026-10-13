@@ -155,6 +155,13 @@ redefine the agreed engagement. See
 * [docs/REVIEWER_GUIDE.md](docs/REVIEWER_GUIDE.md) — a 15-minute walk-through
 * [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — crates, modules, state machine
 
+## Identity
+
+The interface uses the Logos identity: the lambda mark and the "Logos" wordmark
+(geometry from logos.co, `src/components/LogosBrand.tsx`), the logos.co palette
+and the open Fira Code and Public Sans typefaces (OFL, self-hosted through
+`@fontsource`). The Logos name, mark and wordmark belong to Logos.
+
 ## License
 
 MIT. Copyright © 2026 [Logos](https://logos.co/). See [LICENSE](LICENSE).
